@@ -26,7 +26,7 @@ public class AccountingLedgerApp {
         // Welcome message
         System.out.println("➤".repeat(50));
         System.out.println("");
-        System.out.println("◌".repeat(33) + " Welcome Home! " + "◌".repeat(33));
+        System.out.println("◌".repeat(31) + " Welcome Home! " + "◌".repeat(35));
         System.out.println("");
         System.out.println("➤".repeat(50));
         System.out.println("");
@@ -52,6 +52,7 @@ public class AccountingLedgerApp {
         String input = scanner.nextLine().trim().toUpperCase();
         // SCANNER SELECT INPUT
 
+        // OPTIONS
         switch(input) {
             case "D":
                 addDeposit();
@@ -97,8 +98,10 @@ public class AccountingLedgerApp {
             BufferedWriter buffed = new BufferedWriter(addDeposit);
             buffed.write(row);
             buffed.newLine();
+            System.out.println("✅ Deposit Processed Successfully! ✅");
             buffed.close();
         } catch (Exception e) {
+            System.out.println("❌ Deposit Processed Successfully! ❌");
             e.printStackTrace();
         }
 
@@ -106,17 +109,44 @@ public class AccountingLedgerApp {
 
     public static void makePayment() {
 
-        System.out.println("");
+        LocalTime currentTime = LocalTime.now();
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter DTS = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        System.out.println("Welcome to your payment screen!");
+
+        System.out.print("Enter a description for your payment: ");
+        String description = scanner.nextLine();
+
+        System.out.print("Payment going to: ");
+        String recipient = scanner.nextLine();
+
+        System.out.print("Payment amount: $");
+        double pay = Double.parseDouble(scanner.nextLine());
+
+        System.out.printf("%s|%s|%s|%s|-$%.2f\n", currentDate, currentTime.format(DTS), description, recipient, pay);
+
+        String row = String.format("%s|%s|%s|%s|-$%.2f", currentDate, currentTime.format(DTS), description, recipient, pay);
+
+        try {
+            FileWriter addPayment = new FileWriter("src/main/resources/ACCOUNTING LEDGER TRANSACTION INFO.csv", true);
+            BufferedWriter buffed = new BufferedWriter(addPayment);
+            buffed.write(row);
+            buffed.newLine();
+            buffed.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void viewLedger() {
+        public static void viewLedger () {
+            System.out.println("Welcome to the ledger");
 
-        System.out.println("");
-    }
+        }
 
-    public static void exitApp() {
-        System.out.println("Have a great day!");
-        System.exit(0);
-    }
-
+        public static void exitApp () {
+            System.out.println("Have a great day!");
+            System.exit(0);
+        }
 }
+
