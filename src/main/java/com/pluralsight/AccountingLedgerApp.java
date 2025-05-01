@@ -1,5 +1,11 @@
 package com.pluralsight;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class AccountingLedgerApp {
@@ -8,10 +14,10 @@ public class AccountingLedgerApp {
 
     public static void main(String[] args) {
 
-        while (true) {      // KEEP RUNNING
+        boolean active = true;
 
-            homeScreen();
-
+        while (active) {      // KEEP RUNNING
+            homeScreen();   // HOME
      }
 
     }
@@ -43,10 +49,10 @@ public class AccountingLedgerApp {
         // OPTIONS
 
         // SCANNER SELECT INPUT
-        String select = scanner.nextLine().trim().toUpperCase();
+        String input = scanner.nextLine().trim().toUpperCase();
         // SCANNER SELECT INPUT
 
-        switch(select) {
+        switch(input) {
             case "D":
                 addDeposit();
                 break;
@@ -66,21 +72,51 @@ public class AccountingLedgerApp {
     }
 
     public static void addDeposit() {
-    System.out.println("Let's Add Some Munyun!");
+
+        LocalTime currentTime = LocalTime.now();
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter DTS = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+        System.out.println("Welcome to your deposit screen!");
+
+        System.out.print("Enter a description for your deposit: ");
+        String description = scanner.nextLine();
+
+        System.out.print("Vendor for your deposit: ");
+        String vendor = scanner.nextLine();
+
+        System.out.print("How much would you like to deposit today? $");
+        double deposit = Double.parseDouble(scanner.nextLine());
+
+        System.out.printf("%s|%s|%s|%s|+$%.2f\n", currentDate, currentTime.format(DTS), description, vendor, deposit);
+
+        String row = String.format("%s|%s|%s|%s|+$%.2f", currentDate, currentTime.format(DTS), description, vendor, deposit);
+
+        try {
+            FileWriter addDeposit = new FileWriter("src/main/resources/ACCOUNTING LEDGER TRANSACTION INFO.csv", true);
+            BufferedWriter buffed = new BufferedWriter(addDeposit);
+            buffed.write(row);
+            buffed.newLine();
+            buffed.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public static void makePayment() {
+
         System.out.println("");
     }
 
     public static void viewLedger() {
+
         System.out.println("");
     }
 
     public static void exitApp() {
         System.out.println("Have a great day!");
-        System.exit(0
-        );
+        System.exit(0);
     }
 
 }
