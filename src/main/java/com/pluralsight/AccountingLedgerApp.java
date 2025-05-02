@@ -70,13 +70,13 @@ public class AccountingLedgerApp {
         }
 
     }
-
+        // Deposit Method
     public static void addDeposit() {
-
+        // Date Tools
         LocalTime currentTime = LocalTime.now();
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter DTS = DateTimeFormatter.ofPattern("H:mm:ss");
-
+        DateTimeFormatter DTS = DateTimeFormatter.ofPattern("H:mm:ss"); // Format to match requirements
+        // user input
         System.out.println("Welcome to your deposit screen!");
 
         System.out.print("Enter a description for your deposit: ");
@@ -87,11 +87,11 @@ public class AccountingLedgerApp {
 
         System.out.print("How much would you like to deposit today? $");
         double deposit = Double.parseDouble(scanner.nextLine());
-
+        // print format of final deposit
         System.out.printf("%s|%s|%s|%s|+$%.2f\n", currentDate, currentTime.format(DTS), description, vendor, deposit);
 
         String row = String.format("%s|%s|%s|%s|+$%.2f", currentDate, currentTime.format(DTS), description, vendor, deposit);
-
+        // Append information to CSV
         try {
             FileWriter addDeposit = new FileWriter("src/main/resources/AccountingLedgerTransactionInfo.csv", true);
             BufferedWriter buffed = new BufferedWriter(addDeposit);
@@ -107,11 +107,11 @@ public class AccountingLedgerApp {
     }
 
     public static void makePayment() {
-
+            // Date Tools
         LocalTime currentTime = LocalTime.now();
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter DTS = DateTimeFormatter.ofPattern("HH:mm:ss");
-
+            //User Input
         System.out.println("Welcome to your payment screen!");
 
         System.out.print("Enter a description for your payment: ");
@@ -122,11 +122,11 @@ public class AccountingLedgerApp {
 
         System.out.print("Payment amount: $");
         double pay = Double.parseDouble(scanner.nextLine());
-
+            // Final Parse
         System.out.printf("%s|%s|%s|%s|-$%.2f\n", currentDate, currentTime.format(DTS), description, recipient, pay);
 
         String row = String.format("%s|%s|%s|%s|-$%.2f", currentDate, currentTime.format(DTS), description, recipient, pay);
-
+            // Append new row to csv
         try {
             FileWriter addPayment = new FileWriter("src/main/resources/AccountingLedgerTransactionInfo.csv", true);
             BufferedWriter buffed = new BufferedWriter(addPayment);
@@ -137,7 +137,7 @@ public class AccountingLedgerApp {
             e.printStackTrace();
         }
     }
-
+        // Ledger Screen
     public static void viewLedger() {
         System.out.println("Welcome to the ledger");
         System.out.println("A) Display All Transactions");
@@ -147,19 +147,18 @@ public class AccountingLedgerApp {
         System.out.println("H) Go Back Home");
 
         String input = scanner.nextLine().toUpperCase().trim();
+        // Using CSV INFO
+        ArrayList<Transactions> transactions = readTransactions();
 
         switch (input) {
             case "A":
-                ArrayList<Transactions> entries = readTransactions();
-                entriesDisplay(entries);
+                entriesDisplay(transactions);
                 break;
             case "D":
-                ArrayList<Transactions> deposits = readTransactions();
-                displayDeposits(deposits);
+                displayDeposits(transactions);
                 break;
             case "P":
-                ArrayList<Transactions> payments = readTransactions();
-                displayPayments(payments);
+                displayPayments(transactions);
                 break;
             case "R":
                 displayReports();
@@ -172,16 +171,16 @@ public class AccountingLedgerApp {
         }
 
     }
-
+        // EXIT METHOD
     public static void exitApp() {
         System.out.println("Have a great day!");
         System.exit(0);
     }
-
+        // READING METHOD
     public static ArrayList<Transactions> readTransactions() {
-
+            // DECLARE LIST
         ArrayList<Transactions> transactions = new ArrayList<>();
-
+        // TRY AND CATCH FOR READERS
         try {
             FileReader read = new FileReader("src/main/resources/AccountingLedgerTransactionInfo.csv");
             BufferedReader bReader = new BufferedReader(read);
@@ -194,21 +193,21 @@ public class AccountingLedgerApp {
                     topper = false; // Skip the header row
                     continue;
                 }
-
+                    // SPLIT AT PIPE
                 String[] parts = row.split("\\|");
-                if (parts.length == 5) {
+                if (parts.length == 5) {    // 5 SECTIONS TO AN ENTRY
                     try {
-                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");   // FORMAT AND PARSE EACH INDEX SECTION (DATE)
                         LocalDate date = LocalDate.parse(parts[0], dateFormat);
 
-                        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm:ss");
+                        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm:ss");      // TIME FORMAT
                         LocalTime time = LocalTime.parse(parts[1], timeFormat);
 
-                        String description = parts[2];
-                        String vendor = parts[3];
+                        String description = parts[2];  // DECLARE DESCRIPTION SECTION
+                        String vendor = parts[3];       // VENDOR SECTION
                         double amount = Double.parseDouble(parts[4].replace("$", "").replace("+", "").replace("-", ""));
-
-                        if (parts[4].contains("-")) amount *= -1;
+                            // PARSE CURRENCY FOR FLOAT VALUE
+                        if (parts[4].contains("-")) amount *= -1; // MAKES NEGATIVE DOUBLE VALUE
 
                         Transactions transaction = new Transactions(date, time, description, vendor, amount);
                         transactions.add(transaction);
@@ -219,7 +218,7 @@ public class AccountingLedgerApp {
                 }
             }
 
-            bReader.close();
+            bReader.close();    // CLOSE READER
 
         } catch (Exception e) {
             System.out.println("❌ Error loading transactions: " + e.getMessage());
@@ -228,11 +227,11 @@ public class AccountingLedgerApp {
     }
 
     public static void entriesDisplay(ArrayList<Transactions> transactions) {
-
+        // ACCESS CSV FOR ENTRIES
         for (Transactions t : transactions) {
             System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
         }
-
+        //OPTIONAL RETURN
         System.out.println("Return to Ledger Screen?\n Y / N");
 
         Scanner scanner = new Scanner(System.in);
@@ -246,14 +245,14 @@ public class AccountingLedgerApp {
     }
 
     public static void displayDeposits(ArrayList<Transactions> transactions) {
-
+        // ACCESS CSV FOR ENTRIES
         for (Transactions t : transactions) {
             if (t.getAmount() > 0) {
                 System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
-
-        System.out.println("\nReturn to Ledger Screen?\nY / N");
+        //OPTIONAL RETURN
+        System.out.println("Return to Ledger Screen?\nY / N");
 
         Scanner scanner = new Scanner(System.in);
         String reply = scanner.nextLine().trim().toUpperCase();
@@ -266,13 +265,14 @@ public class AccountingLedgerApp {
     }
 
     public static void displayPayments(ArrayList<Transactions> transactions) {
+        //CSV ACCESS
         for (Transactions t : transactions) {
             if (t.getAmount() < 0) {
                 System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
 
-        System.out.println("\nReturn to Ledger Screen?\nY / N");
+        System.out.println("Return to Ledger Screen?\nY / N");
 
         Scanner scanner = new Scanner(System.in);
         String reply = scanner.nextLine().trim().toUpperCase();
@@ -287,7 +287,7 @@ public class AccountingLedgerApp {
     public static void displayReports() {
 
         ArrayList<Transactions> transactions = readTransactions();
-
+        // REPORTS SCREEN
         while (true) {
             System.out.println("┋".repeat(19) + "\uD800\uDF42 Welcome to your reports menu! \uD800\uDF42" + "┋".repeat(21));
             System.out.println("1) Month To Date");
@@ -299,7 +299,7 @@ public class AccountingLedgerApp {
 
             System.out.print("SELECT「⌥=========⫸ ");
             String answer = scanner.nextLine().trim();
-
+            // OPTIONS SELECT
             switch (answer) {
                 case "1":
                     monthToDate(transactions);
@@ -334,10 +334,10 @@ public class AccountingLedgerApp {
     }
 
     public static void monthToDate(ArrayList<Transactions> transactions) {
-
+            // DATE FORMAT
         LocalDate present = LocalDate.now();
         LocalDate firstOfMonth = present.withDayOfMonth(1);
-
+            // IF TRANSACTION IS ON OR AFTER THE FIRST OF MONTH
         for (Transactions t : transactions) {
             if (!t.getDate().isBefore(firstOfMonth)) {
                 System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
@@ -346,10 +346,11 @@ public class AccountingLedgerApp {
     }
 
     public static void previousMonth(ArrayList<Transactions> transactions) {
+        // DATE FORMAT
         LocalDate present = LocalDate.now();
         LocalDate firstOfMonth = present.minusMonths(1).withDayOfMonth(1);
         LocalDate lastOfMonth = firstOfMonth.withDayOfMonth(firstOfMonth.lengthOfMonth());
-
+            // DISPLAY WITHIN MONTH
         for (Transactions t : transactions) {
             if (!t.getDate().isBefore(firstOfMonth) && !t.getDate().isAfter(lastOfMonth)) {
                 System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
@@ -360,7 +361,7 @@ public class AccountingLedgerApp {
     public static void yearToDate(ArrayList<Transactions> transactions) {
         LocalDate present = LocalDate.now();
         LocalDate startOfYear = present.withDayOfYear(1);
-
+            // INCLUDE EVERYTHING FROM JAN 1
         for (Transactions t : transactions) {
             if (!t.getDate().isBefore(startOfYear)) {
                 System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
@@ -370,10 +371,10 @@ public class AccountingLedgerApp {
 
     public static void previousYear(ArrayList<Transactions> transactions) {
         int lastYear = LocalDate.now().getYear() - 1;
-
+            // 2025 - 1
         for (Transactions t : transactions) {
 
-
+                //ONLY LAST YEAR ENTRIES
             if (t.getDate().getYear() == lastYear) {
                 System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
@@ -382,10 +383,10 @@ public class AccountingLedgerApp {
 
     public static void searchByVendor(ArrayList<Transactions> transactions) {
         System.out.print("Enter vendor name: ");
-        String vendorSearch = scanner.nextLine().trim().toLowerCase();
-
+        String vendor = scanner.nextLine().trim().toLowerCase();
+            // GET VENDOR INFO
         for (Transactions t : transactions) {
-            if (t.getVendor().toLowerCase().contains(vendorSearch)) {
+            if (t.getVendor().toLowerCase().contains(vendor)) {
                 System.out.println(t);
             }
         }
