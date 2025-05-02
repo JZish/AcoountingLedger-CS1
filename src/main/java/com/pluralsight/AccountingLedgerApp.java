@@ -379,7 +379,6 @@ public class AccountingLedgerApp {
     }
 
     public static void searchByVendor(ArrayList<Transactions> transactions) {
-
         System.out.print("Enter vendor name: ");
         String vendorSearch = scanner.nextLine().trim().toLowerCase();
 
