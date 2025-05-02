@@ -50,6 +50,11 @@ Each transaction includes the following fields:
 - `Amount` (double)
 
 ---
+## Interesting Code
+![Screenshot 2025-05-02 052032](https://github.com/user-attachments/assets/d50eb9ed-4755-4b9c-b90a-fe6c09d1de1d)
+
+Interesting the read method and breaking it down to recognize the core values needed.
+---
 
 ## 🖥️ Sample Console Output
 ![Screenshot 2025-05-02 090927](https://github.com/user-attachments/assets/f538978f-fb7b-4bb9-97e6-6367cc118ed4)
