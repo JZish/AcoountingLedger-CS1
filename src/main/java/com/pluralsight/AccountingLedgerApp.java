@@ -349,7 +349,7 @@ public class AccountingLedgerApp {
         // DATE FORMAT
         LocalDate present = LocalDate.now();
         LocalDate firstOfMonth = present.minusMonths(1).withDayOfMonth(1);
-        LocalDate lastOfMonth = firstOfMonth.withDayOfMonth(firstOfMonth.lengthOfMonth());
+        LocalDate lastOfMonth = firstOfMonth.withDayOfMonth(firstOfMonth.lengthOfMonth());  //Gets last month and subtracts length by one
             // DISPLAY WITHIN MONTH
         for (Transactions t : transactions) {
             if (!t.getDate().isBefore(firstOfMonth) && !t.getDate().isAfter(lastOfMonth)) {
@@ -373,7 +373,6 @@ public class AccountingLedgerApp {
         int lastYear = LocalDate.now().getYear() - 1;
             // 2025 - 1
         for (Transactions t : transactions) {
-
                 //ONLY LAST YEAR ENTRIES
             if (t.getDate().getYear() == lastYear) {
                 System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
