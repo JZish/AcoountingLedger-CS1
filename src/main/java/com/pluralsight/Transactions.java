@@ -22,6 +22,11 @@ import java.time.LocalTime;
         this.amount = amount;
     }
         // CONSTRUCTOR
+            // Override String Format
+        public String toString() {
+            return String.format("%s | %s | %s | %s | $%.2f", date, time, description, vendor, amount);
+        }
+            // Override String Format
 
         // Getters
 

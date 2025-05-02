@@ -88,7 +88,7 @@ public class AccountingLedgerApp {
         System.out.print("How much would you like to deposit today? $");
         double deposit = Double.parseDouble(scanner.nextLine());
         // print format of final deposit
-        System.out.printf("%s|%s|%s|%s|+$%.2f\n", currentDate, currentTime.format(DTS), description, vendor, deposit);
+        System.out.printf("\n%s|%s|%s|%s|+$%.2f\n", currentDate, currentTime.format(DTS), description, vendor, deposit);
 
         String row = String.format("%s|%s|%s|%s|+$%.2f", currentDate, currentTime.format(DTS), description, vendor, deposit);
         // Append information to CSV
@@ -97,10 +97,10 @@ public class AccountingLedgerApp {
             BufferedWriter buffed = new BufferedWriter(addDeposit);
             buffed.write(row);
             buffed.newLine();
-            System.out.println("✅ Deposit Processed Successfully! ✅");
+            System.out.println("\n✅ Deposit Processed Successfully! ✅\n");
             buffed.close();
         } catch (Exception e) {
-            System.out.println("❌ Deposit Processed Successfully! ❌");
+            System.out.println("\n❌ Deposit Processed Successfully! ❌");
             e.printStackTrace();
         }
 
@@ -112,20 +112,20 @@ public class AccountingLedgerApp {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter DTS = DateTimeFormatter.ofPattern("HH:mm:ss");
             //User Input
-        System.out.println("Welcome to your payment screen!");
+        System.out.println("Welcome to your payment screen!\n");
 
         System.out.print("Enter a description for your payment: ");
         String description = scanner.nextLine();
 
-        System.out.print("Payment going to: ");
+        System.out.print("\nPayment going to: ");
         String recipient = scanner.nextLine();
 
-        System.out.print("Payment amount: $");
+        System.out.print("\nPayment amount: $");
         double pay = Double.parseDouble(scanner.nextLine());
             // Final Parse
         System.out.printf("%s|%s|%s|%s|-$%.2f\n", currentDate, currentTime.format(DTS), description, recipient, pay);
 
-        String row = String.format("%s|%s|%s|%s|-$%.2f", currentDate, currentTime.format(DTS), description, recipient, pay);
+        String row = String.format("%s|%s|%s|%s|-$%.2f\n", currentDate, currentTime.format(DTS), description, recipient, pay);
             // Append new row to csv
         try {
             FileWriter addPayment = new FileWriter("src/main/resources/AccountingLedgerTransactionInfo.csv", true);
@@ -139,7 +139,7 @@ public class AccountingLedgerApp {
     }
         // Ledger Screen
     public static void viewLedger() {
-        System.out.println("Welcome to the ledger");
+        System.out.println("\nWelcome to your ledger!\n");
         System.out.println("A) Display All Transactions");
         System.out.println("D) Deposits");
         System.out.println("P) Payments");
@@ -173,7 +173,7 @@ public class AccountingLedgerApp {
     }
         // EXIT METHOD
     public static void exitApp() {
-        System.out.println("Have a great day!");
+        System.out.println("\nHave a great day!");
         System.exit(0);
     }
         // READING METHOD
@@ -229,10 +229,10 @@ public class AccountingLedgerApp {
     public static void entriesDisplay(ArrayList<Transactions> transactions) {
         // ACCESS CSV FOR ENTRIES
         for (Transactions t : transactions) {
-            System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
         }
         //OPTIONAL RETURN
-        System.out.println("Return to Ledger Screen?\n Y / N");
+        System.out.println("\nReturn to Ledger Screen?\n Y / N");
 
         Scanner scanner = new Scanner(System.in);
         String reply = scanner.nextLine().trim().toUpperCase();
@@ -248,11 +248,11 @@ public class AccountingLedgerApp {
         // ACCESS CSV FOR ENTRIES
         for (Transactions t : transactions) {
             if (t.getAmount() > 0) {
-                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+                System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
         //OPTIONAL RETURN
-        System.out.println("Return to Ledger Screen?\nY / N");
+        System.out.println("\nReturn to Ledger Screen?\nY / N");
 
         Scanner scanner = new Scanner(System.in);
         String reply = scanner.nextLine().trim().toUpperCase();
@@ -268,11 +268,11 @@ public class AccountingLedgerApp {
         //CSV ACCESS
         for (Transactions t : transactions) {
             if (t.getAmount() < 0) {
-                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+                System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
 
-        System.out.println("Return to Ledger Screen?\nY / N");
+        System.out.println("\nReturn to Ledger Screen?\nY / N");
 
         Scanner scanner = new Scanner(System.in);
         String reply = scanner.nextLine().trim().toUpperCase();
@@ -289,15 +289,15 @@ public class AccountingLedgerApp {
         ArrayList<Transactions> transactions = readTransactions();
         // REPORTS SCREEN
         while (true) {
-            System.out.println("┋".repeat(19) + "\uD800\uDF42 Welcome to your reports menu! \uD800\uDF42" + "┋".repeat(21));
-            System.out.println("1) Month To Date");
+            System.out.println("\n" + "┋".repeat(19) + "\uD800\uDF42 Welcome to your reports menu! \uD800\uDF42" + "┋".repeat(21));
+            System.out.println("\n1) Month To Date");
             System.out.println("2) Previous Month");
             System.out.println("3) Year To Date");
             System.out.println("4) Previous Year");
             System.out.println("5) Search by Vendor");
-            System.out.println("0) Back");
+            System.out.println("0) Back\n");
 
-            System.out.print("SELECT「⌥=========⫸ ");
+            System.out.print("\nSELECT「⌥=========⫸ ");
             String answer = scanner.nextLine().trim();
             // OPTIONS SELECT
             switch (answer) {
@@ -340,7 +340,7 @@ public class AccountingLedgerApp {
             // IF TRANSACTION IS ON OR AFTER THE FIRST OF MONTH
         for (Transactions t : transactions) {
             if (!t.getDate().isBefore(firstOfMonth)) {
-                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+                System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
     }
@@ -353,7 +353,7 @@ public class AccountingLedgerApp {
             // DISPLAY WITHIN MONTH
         for (Transactions t : transactions) {
             if (!t.getDate().isBefore(firstOfMonth) && !t.getDate().isAfter(lastOfMonth)) {
-                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+                System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
     }
@@ -364,7 +364,7 @@ public class AccountingLedgerApp {
             // INCLUDE EVERYTHING FROM JAN 1
         for (Transactions t : transactions) {
             if (!t.getDate().isBefore(startOfYear)) {
-                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+                System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
     }
@@ -376,7 +376,7 @@ public class AccountingLedgerApp {
 
                 //ONLY LAST YEAR ENTRIES
             if (t.getDate().getYear() == lastYear) {
-                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+                System.out.printf("\n%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
         }
     }
@@ -387,7 +387,7 @@ public class AccountingLedgerApp {
             // GET VENDOR INFO
         for (Transactions t : transactions) {
             if (t.getVendor().toLowerCase().contains(vendor)) {
-                System.out.println(t);
+                System.out.println("\n" + t);      // Print it to new format
             }
         }
     }
