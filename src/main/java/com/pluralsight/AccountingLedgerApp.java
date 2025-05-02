@@ -372,6 +372,8 @@ public class AccountingLedgerApp {
         int lastYear = LocalDate.now().getYear() - 1;
 
         for (Transactions t : transactions) {
+
+
             if (t.getDate().getYear() == lastYear) {
                 System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
             }
