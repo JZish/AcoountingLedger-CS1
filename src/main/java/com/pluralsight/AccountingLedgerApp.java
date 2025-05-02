@@ -1,11 +1,10 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AccountingLedgerApp {
@@ -141,6 +140,33 @@ public class AccountingLedgerApp {
 
         public static void viewLedger () {
             System.out.println("Welcome to the ledger");
+            System.out.println("A) Display All Transactions");
+            System.out.println("D) Deposits");
+            System.out.println("P) Payments");
+            System.out.println("R) Reports");
+            System.out.println("H) Go Back Home");
+
+            String input = scanner.nextLine().toUpperCase().trim();
+
+            switch (input) {
+                case "A":
+                    displayAllEntries();
+                    break;
+                case "D":
+                    displayDeposits();
+                    break;
+                case "P":
+                    displayPayments();
+                    break;
+                case "R":
+                    displayReports();
+                    break;
+                case "H":
+                    System.out.println("Let's go back home!");
+                    break;
+                default:
+                    System.out.println("Sorry that's not an available option.");
+            }
 
         }
 
@@ -148,5 +174,37 @@ public class AccountingLedgerApp {
             System.out.println("Have a great day!");
             System.exit(0);
         }
+
+    public static ArrayList<Transactions> displayAllEntries() {
+
+        ArrayList<Transactions> entry = new ArrayList<Transactions>();
+        try {
+
+            FileReader entries = new FileReader("ACCOUNTING LEDGER TRANSACTION INFO");
+            BufferedReader read = new BufferedReader(entries);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void displayDeposits() {
+
+    }
+
+    public static void displayPayments() {
+
+    }
+
+    public static void displayReports() {
+
+    }
+
+
+
+
+
+
 }
 
