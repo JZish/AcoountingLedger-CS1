@@ -100,7 +100,7 @@ public class AccountingLedgerApp {
             System.out.println("\n✅ Deposit Processed Successfully! ✅\n");
             buffed.close();
         } catch (Exception e) {
-            System.out.println("\n❌ Deposit Processed Successfully! ❌");
+            System.out.println("\n❌ Deposit Processed unsuccessfully! ❌");
             e.printStackTrace();
         }
 
