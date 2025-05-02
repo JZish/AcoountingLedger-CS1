@@ -17,7 +17,7 @@ public class AccountingLedgerApp {
 
         while (active) {      // KEEP RUNNING
             homeScreen();   // HOME
-     }
+        }
 
     }
 
@@ -32,16 +32,16 @@ public class AccountingLedgerApp {
         // Welcome message
 
         // OPTIONS
-        System.out.println("What would you like to do today?\n");
+        System.out.println("✾ What would you like to do today? ✾\n");
         System.out.println("\uD808\uDC2D ".repeat(30));
         System.out.println("");
-        System.out.println("D) Add Deposit");
+        System.out.println("D) \uD83D\uDE68 Add Deposit \uD83D\uDE68");
         System.out.println("        ₪");
-        System.out.println("P) Make Payment (Debit)");
+        System.out.println("P) ⚖ Make Payment (Debit) ⚖");
         System.out.println("        ₪");
-        System.out.println("L) View Ledger");
+        System.out.println("L) 〚 View Ledger 〛");
         System.out.println("        ₪");
-        System.out.println("X) Exit\n");
+        System.out.println("X) \uD808\uDD8E Exit \uD808\uDD8E\n");
         System.out.println("\uD808\uDC2D ".repeat(30));
         System.out.println("");
         System.out.print("SELECT「⌥=========⫸ ");
@@ -52,7 +52,7 @@ public class AccountingLedgerApp {
         // SCANNER SELECT INPUT
 
         // OPTIONS
-        switch(input) {
+        switch (input) {
             case "D":
                 addDeposit();
                 break;
@@ -138,45 +138,45 @@ public class AccountingLedgerApp {
         }
     }
 
-        public static void viewLedger () {
-            System.out.println("Welcome to the ledger");
-            System.out.println("A) Display All Transactions");
-            System.out.println("D) Deposits");
-            System.out.println("P) Payments");
-            System.out.println("R) Reports");
-            System.out.println("H) Go Back Home");
+    public static void viewLedger() {
+        System.out.println("Welcome to the ledger");
+        System.out.println("A) Display All Transactions");
+        System.out.println("D) Deposits");
+        System.out.println("P) Payments");
+        System.out.println("R) Reports");
+        System.out.println("H) Go Back Home");
 
-            String input = scanner.nextLine().toUpperCase().trim();
+        String input = scanner.nextLine().toUpperCase().trim();
 
-            switch (input) {
-                case "A":
-                    ArrayList<Transactions> entries = readTransactions();
-                    entriesDisplay(entries);
-                    break;
-                case "D":
-                    ArrayList<Transactions> deposits = readTransactions();
-                    displayDeposits(deposits);
-                    break;
-                case "P":
-                    ArrayList<Transactions> payments = readTransactions();
-                    displayPayments();
-                    break;
-                case "R":
-                    displayReports();
-                    break;
-                case "H":
-                    System.out.println("Let's go back home!");
-                    break;
-                default:
-                    System.out.println("Sorry that's not an available option.");
-            }
-
+        switch (input) {
+            case "A":
+                ArrayList<Transactions> entries = readTransactions();
+                entriesDisplay(entries);
+                break;
+            case "D":
+                ArrayList<Transactions> deposits = readTransactions();
+                displayDeposits(deposits);
+                break;
+            case "P":
+                ArrayList<Transactions> payments = readTransactions();
+                displayPayments(payments);
+                break;
+            case "R":
+                displayReports();
+                break;
+            case "H":
+                System.out.println("Let's go back home!");
+                break;
+            default:
+                System.out.println("Sorry that's not an available option.");
         }
 
-        public static void exitApp () {
-            System.out.println("Have a great day!");
-            System.exit(0);
-        }
+    }
+
+    public static void exitApp() {
+        System.out.println("Have a great day!");
+        System.exit(0);
+    }
 
     public static ArrayList<Transactions> readTransactions() {
 
@@ -227,7 +227,7 @@ public class AccountingLedgerApp {
         return transactions;
     }
 
-    public static void entriesDisplay (ArrayList<Transactions> transactions) {
+    public static void entriesDisplay(ArrayList<Transactions> transactions) {
 
         for (Transactions t : transactions) {
             System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
@@ -261,22 +261,134 @@ public class AccountingLedgerApp {
         if (reply.equals("Y")) {
             viewLedger();
         } else {
-            homeScreen(); // optional
+            homeScreen();
         }
     }
 
-    public static void displayPayments() {
+    public static void displayPayments(ArrayList<Transactions> transactions) {
+        for (Transactions t : transactions) {
+            if (t.getAmount() < 0) {
+                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            }
+        }
 
+        System.out.println("\nReturn to Ledger Screen?\nY / N");
+
+        Scanner scanner = new Scanner(System.in);
+        String reply = scanner.nextLine().trim().toUpperCase();
+
+        if (reply.equals("Y")) {
+            viewLedger();
+        } else {
+            homeScreen();
+        }
     }
 
     public static void displayReports() {
 
+        ArrayList<Transactions> transactions = readTransactions();
+
+        while (true) {
+            System.out.println("┋".repeat(19) + "\uD800\uDF42 Welcome to your reports menu! \uD800\uDF42" + "┋".repeat(21));
+            System.out.println("1) Month To Date");
+            System.out.println("2) Previous Month");
+            System.out.println("3) Year To Date");
+            System.out.println("4) Previous Year");
+            System.out.println("5) Search by Vendor");
+            System.out.println("0) Back");
+
+            System.out.print("SELECT「⌥=========⫸ ");
+            String answer = scanner.nextLine().trim();
+
+            switch (answer) {
+                case "1":
+                    monthToDate(transactions);
+                    break;
+                case "2":
+                    previousMonth(transactions);
+                    break;
+                case "3":
+                    yearToDate(transactions);
+                    break;
+                case "4":
+                    previousYear(transactions);
+                    break;
+                case "5":
+                    searchByVendor(transactions);
+                    break;
+                case "0":
+                    System.out.println("Returning...");
+                    try {
+                        Thread.sleep(2000);
+                        return;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                default:
+                    System.out.println("Sorry that's not an option. Please try again.");
+            }
+
+        }
+
+
     }
 
+    public static void monthToDate(ArrayList<Transactions> transactions) {
 
+        LocalDate present = LocalDate.now();
+        LocalDate firstOfMonth = present.withDayOfMonth(1);
 
+        for (Transactions t : transactions) {
+            if (!t.getDate().isBefore(firstOfMonth)) {
+                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            }
+        }
+    }
 
+    public static void previousMonth(ArrayList<Transactions> transactions) {
+        LocalDate present = LocalDate.now();
+        LocalDate firstOfMonth = present.minusMonths(1).withDayOfMonth(1);
+        LocalDate lastOfMonth = firstOfMonth.withDayOfMonth(firstOfMonth.lengthOfMonth());
 
+        for (Transactions t : transactions) {
+            if (!t.getDate().isBefore(firstOfMonth) && !t.getDate().isAfter(lastOfMonth)) {
+                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            }
+        }
+    }
+
+    public static void yearToDate(ArrayList<Transactions> transactions) {
+        LocalDate present = LocalDate.now();
+        LocalDate startOfYear = present.withDayOfYear(1);
+
+        for (Transactions t : transactions) {
+            if (!t.getDate().isBefore(startOfYear)) {
+                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            }
+        }
+    }
+
+    public static void previousYear(ArrayList<Transactions> transactions) {
+        int lastYear = LocalDate.now().getYear() - 1;
+
+        for (Transactions t : transactions) {
+            if (t.getDate().getYear() == lastYear) {
+                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            }
+        }
+    }
+
+    public static void searchByVendor(ArrayList<Transactions> transactions) {
+
+        System.out.print("Enter vendor name: ");
+        String vendorSearch = scanner.nextLine().trim().toLowerCase();
+
+        for (Transactions t : transactions) {
+            if (t.getVendor().toLowerCase().contains(vendorSearch)) {
+                System.out.println(t);
+            }
+        }
+    }
 
 }
 
