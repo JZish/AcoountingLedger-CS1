@@ -53,7 +53,7 @@ Each transaction includes the following fields:
 ## Interesting Code
 ![Screenshot 2025-05-02 052032](https://github.com/user-attachments/assets/d50eb9ed-4755-4b9c-b90a-fe6c09d1de1d)
 
-Interesting the read method and breaking it down to recognize the core values needed.
+Inserting the read method and breaking it down to recognize the core values needed.
 ---
 
 ## 🖥️ Sample Console Output
