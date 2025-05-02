@@ -24,6 +24,7 @@ import java.time.LocalTime;
         // CONSTRUCTOR
 
         // Getters
+
         public LocalDate getDate() {
             return date;
         }

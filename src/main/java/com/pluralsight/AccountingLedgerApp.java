@@ -75,7 +75,7 @@ public class AccountingLedgerApp {
 
         LocalTime currentTime = LocalTime.now();
         LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter DTS = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter DTS = DateTimeFormatter.ofPattern("H:mm:ss");
 
         System.out.println("Welcome to your deposit screen!");
 
@@ -93,7 +93,7 @@ public class AccountingLedgerApp {
         String row = String.format("%s|%s|%s|%s|+$%.2f", currentDate, currentTime.format(DTS), description, vendor, deposit);
 
         try {
-            FileWriter addDeposit = new FileWriter("src/main/resources/ACCOUNTING LEDGER TRANSACTION INFO.csv", true);
+            FileWriter addDeposit = new FileWriter("src/main/resources/AccountingLedgerTransactionInfo.csv", true);
             BufferedWriter buffed = new BufferedWriter(addDeposit);
             buffed.write(row);
             buffed.newLine();
@@ -128,7 +128,7 @@ public class AccountingLedgerApp {
         String row = String.format("%s|%s|%s|%s|-$%.2f", currentDate, currentTime.format(DTS), description, recipient, pay);
 
         try {
-            FileWriter addPayment = new FileWriter("src/main/resources/ACCOUNTING LEDGER TRANSACTION INFO.csv", true);
+            FileWriter addPayment = new FileWriter("src/main/resources/AccountingLedgerTransactionInfo.csv", true);
             BufferedWriter buffed = new BufferedWriter(addPayment);
             buffed.write(row);
             buffed.newLine();
@@ -150,12 +150,15 @@ public class AccountingLedgerApp {
 
             switch (input) {
                 case "A":
-                    displayAllEntries();
+                    ArrayList<Transactions> entries = readTransactions();
+                    entriesDisplay(entries);
                     break;
                 case "D":
-                    displayDeposits();
+                    ArrayList<Transactions> deposits = readTransactions();
+                    displayDeposits(deposits);
                     break;
                 case "P":
+                    ArrayList<Transactions> payments = readTransactions();
                     displayPayments();
                     break;
                 case "R":
@@ -175,22 +178,91 @@ public class AccountingLedgerApp {
             System.exit(0);
         }
 
-    public static ArrayList<Transactions> displayAllEntries() {
+    public static ArrayList<Transactions> readTransactions() {
 
-        ArrayList<Transactions> entry = new ArrayList<Transactions>();
+        ArrayList<Transactions> transactions = new ArrayList<>();
+
         try {
+            FileReader read = new FileReader("src/main/resources/AccountingLedgerTransactionInfo.csv");
+            BufferedReader bReader = new BufferedReader(read);
 
-            FileReader entries = new FileReader("ACCOUNTING LEDGER TRANSACTION INFO");
-            BufferedReader read = new BufferedReader(entries);
+            String row;
+            boolean topper = true; // ignore top header
+
+            while ((row = bReader.readLine()) != null) {
+                if (topper) {
+                    topper = false; // Skip the header row
+                    continue;
+                }
+
+                String[] parts = row.split("\\|");
+                if (parts.length == 5) {
+                    try {
+                        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate date = LocalDate.parse(parts[0], dateFormat);
+
+                        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("H:mm:ss");
+                        LocalTime time = LocalTime.parse(parts[1], timeFormat);
+
+                        String description = parts[2];
+                        String vendor = parts[3];
+                        double amount = Double.parseDouble(parts[4].replace("$", "").replace("+", "").replace("-", ""));
+
+                        if (parts[4].contains("-")) amount *= -1;
+
+                        Transactions transaction = new Transactions(date, time, description, vendor, amount);
+                        transactions.add(transaction);
+                    } catch (Exception e) {
+                        System.out.println("Error parsing transaction line: " + row);
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            bReader.close();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ Error loading transactions: " + e.getMessage());
         }
-
+        return transactions;
     }
 
-    public static void displayDeposits() {
+    public static void entriesDisplay (ArrayList<Transactions> transactions) {
 
+        for (Transactions t : transactions) {
+            System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+        }
+
+        System.out.println("Return to Ledger Screen?\n Y / N");
+
+        Scanner scanner = new Scanner(System.in);
+        String reply = scanner.nextLine().trim().toUpperCase();
+
+        if (reply.equals("Y")) {
+            viewLedger();
+        } else {
+            homeScreen();
+        }
+    }
+
+    public static void displayDeposits(ArrayList<Transactions> transactions) {
+
+        for (Transactions t : transactions) {
+            if (t.getAmount() > 0) {
+                System.out.printf("%s | %s | %s | %s | $%.2f\n", t.getDate(), t.getTime(), t.getDescription(), t.getVendor(), t.getAmount());
+            }
+        }
+
+        System.out.println("\nReturn to Ledger Screen?\nY / N");
+
+        Scanner scanner = new Scanner(System.in);
+        String reply = scanner.nextLine().trim().toUpperCase();
+
+        if (reply.equals("Y")) {
+            viewLedger();
+        } else {
+            homeScreen(); // optional
+        }
     }
 
     public static void displayPayments() {
